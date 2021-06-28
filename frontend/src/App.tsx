@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
+import Home from './components/Home';
+
 import logo from './logo.svg';
 import './App.css';
 
@@ -12,18 +14,26 @@ function App() {
   const [userName, setUserName] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
-  const registerClicked = async() => {
+  const registerClicked = async () => {
     try {
-      const response = await axios.post('http://localhost:4000/api/register', {userName: 'chris', password: '123'});
-      console.log(response);
+      const response = await axios.post('http://localhost:4000/api/register', { userName: userName, password: password });
+      console.log(response.data.message);
     } catch (error) {
       console.error(error);
     }
   }
 
-  
-  const loginClicked = () => {
-    //do nothing
+
+  const loginClicked = async () => {
+    try {
+      const response = await axios.post('http://localhost:4000/api/login', { userName: userName, password: password });
+      let loggedIn = response.data.loggedIn;
+      //set if true
+      console.log(`log in req returned: ${loggedIn}`)
+      setIsLoggedIn(loggedIn);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   return (
@@ -33,7 +43,10 @@ function App() {
       <p>We will never track your data</p>
       {isLoggedIn ?
         (
-          <input type='button' value='Logout' />
+          <>
+            <input type='button' value='Logout' />
+            <Home />
+          </>
         )
         :
         (
@@ -48,7 +61,7 @@ function App() {
 
                   <p>Username</p><input type='text' value={userName} onChange={(event) => setUserName(event.target.value)} />
                   <p>Password</p><input type='text' value={password} onChange={(event) => setPassword(event.target.value)} />
-                  <input type="button" value='Register' onClick={registerClicked}/>
+                  <input type="button" value='Register' onClick={registerClicked} />
                 </div>
               )
               :
@@ -58,7 +71,7 @@ function App() {
 
                   <p>Username</p><input type='text' value={userName} onChange={(event) => setUserName(event.target.value)} />
                   <p>Password</p><input type='text' value={password} onChange={(event) => setPassword(event.target.value)} />
-                  <input type="button" value='Login' onClick={loginClicked}/>
+                  <input type="button" value='Login' onClick={loginClicked} />
                 </div>
               )
             }
