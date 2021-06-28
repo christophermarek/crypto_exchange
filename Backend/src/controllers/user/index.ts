@@ -6,12 +6,13 @@ import { userType } from "../../types/userType";
 
 const register = async (req: Request, res: Response): Promise<void> => {
     try {
-
+        console.log(req.body);
         //req.body..
         /*
         const realtimeList: realtimedataType[] = await realtimeWsb.find().exec()
         res.status(200).json({ realtimeList })
         */
+       res.status(200).json({ res: req.body})
     } catch (error) {
         res.status(400).json({ error: error });
     }

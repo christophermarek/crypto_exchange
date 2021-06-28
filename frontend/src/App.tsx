@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import axios from 'axios';
+
 import logo from './logo.svg';
 import './App.css';
 
@@ -10,8 +12,13 @@ function App() {
   const [userName, setUserName] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
-  const registerClicked = () => {
-    //do nothing
+  const registerClicked = async() => {
+    try {
+      const response = await axios.post('http://localhost:4000/api/register', {userName: 'chris', password: '123'});
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   

@@ -3,6 +3,7 @@ import * as dotenv from 'dotenv'
 import mongoose from 'mongoose'
 import cors from 'cors'
 import bnnmarketcallRoutes from './routes'
+import bodyParser from 'body-parser'
 
 dotenv.config();
 console.log("dotenv", dotenv);
@@ -10,7 +11,7 @@ console.log("dotenv", dotenv);
 const app: Express = express()
 
 const PORT: string | number = process.env.PORT || 4000
-
+app.use(bodyParser.json())
 app.use(cors())
 app.use(bnnmarketcallRoutes)
 

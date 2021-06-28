@@ -8,6 +8,8 @@
     "npm": "6.14.7"
   },
   "dependencies": {
+    "body-parser": "^1.19.0",
+    "concurrently": "^6.0.2",
     "cors": "^2.8.5",
     "dotenv": "^9.0.1",
     "express": "^4.17.1",
@@ -15,8 +17,7 @@
     "graphql": "^15.5.0",
     "mongoose": "^5.12.7",
     "node-fetch": "^2.6.1",
-    "ts-node": "^9.1.1",    
-    "concurrently": "^6.0.2",
+    "ts-node": "^9.1.1",
     "yahoo-stock-prices": "^1.1.0",
     "yahoo-stock-prices-fetch": "^1.4.4"
   },
