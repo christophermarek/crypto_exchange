@@ -5,8 +5,15 @@ import Markets from './Markets';
 type Props = HomeProps;
 
 const Home: React.FC<Props> = () => {
-
+    const defaultBalances = {
+        USDT: '0.00',
+        BTC: '0.00',
+        ETH: '0.00',
+        VET: '0.00'
+    };
+    
     const [pageSelected, setPageSelected] = useState<string>('markets');
+    const [balances, setBalances] = useState<balances>(defaultBalances);
 
     return (
         <>
@@ -15,7 +22,7 @@ const Home: React.FC<Props> = () => {
             <input type='button' value='Markets' onClick={() => setPageSelected('markets')} />
 
             {pageSelected === 'balance' &&
-                <Balance />
+                <Balance balances={balances} setBalances={setBalances}/>
             }
             {pageSelected === 'markets' &&
                 <Markets />

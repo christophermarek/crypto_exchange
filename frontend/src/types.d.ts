@@ -7,7 +7,8 @@ interface MarketProps{
 }
 
 interface BalanceProps{
-    
+    balances: balances
+    setBalances: React.Dispatch<React.SetStateAction<balances>>
 }
 
 interface TradeViewProps{
