@@ -18,7 +18,12 @@ const Balance: React.FC<Props> = () => {
     }
 
     const depositCoins = (coinName: string) => {
-
+        let amount = prompt("Enter coins to deposit", "0");
+    
+        if (amount != null) {
+            //test for number and stuff after.
+            setBalances({...balances, [coinName]: amount});
+        }
     }
 
     return (
