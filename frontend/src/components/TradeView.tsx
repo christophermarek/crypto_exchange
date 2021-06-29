@@ -16,12 +16,15 @@ const TradeView: React.FC<Props> = ({ pair }) => {
 
 
     const renderOrderBook = (orderBook: Array<order>) => {
-        orderBook.map((order, index) =>
-            <li key={index}>
-                <p>{order.direction} Order for {pair.pairing} at a price of {order.price} per unit for {order.units} units. Total: {order.total}</p>
-            </li>
+        return (
+            orderBook.map((order, index) =>
+                <li key={index}>
+                    {order.direction} Order for {pair.pairing} at a price of {order.price} per unit for {order.units} units. Total: {order.total}
+                </li>
+            )
         )
     }
+
 
     const sendOrder = (direction: string) => {
         const total = String(Number(units) * Number(price));
@@ -46,7 +49,7 @@ const TradeView: React.FC<Props> = ({ pair }) => {
             <p>TradeView Page for {pair.main} / {pair.pairing}</p>
 
             <div className='buyOrders'>
-                {buyOrderBook.length > 1 ?
+                {buyOrderBook.length > 0 ?
                     (
                         <>
                             <p>Buy Orders</p>
@@ -60,7 +63,7 @@ const TradeView: React.FC<Props> = ({ pair }) => {
                 }
             </div>
             <div className='sellOrders'>
-                {sellOrderBook.length > 1 ?
+                {sellOrderBook.length > 0 ?
                     (
                         <>
                             <p>Sell Orders</p>
@@ -75,7 +78,7 @@ const TradeView: React.FC<Props> = ({ pair }) => {
             </div>
 
             <div className='orderForm'>
-                <input type='button' value={`Change to ${isBuyOrder ? 'Sell' : 'Buy'}`} onClick={() => setIsBuyOrder(!isBuyOrder)}/>
+                <input type='button' value={`Change to ${isBuyOrder ? 'Sell' : 'Buy'}`} onClick={() => setIsBuyOrder(!isBuyOrder)} />
                 <p>{isBuyOrder ? 'Buy' : 'Sell'} {pair.pairing}</p>
                 <div>
                     <p>Units</p>
