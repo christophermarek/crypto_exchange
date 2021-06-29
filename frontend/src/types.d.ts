@@ -26,4 +26,11 @@ interface order{
     total: string
 }
 
+interface balances{
+    USDT: string
+    BTC: string
+    ETH: string
+    VET: string
+}
+
 

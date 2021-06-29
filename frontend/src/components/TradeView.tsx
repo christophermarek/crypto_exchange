@@ -19,7 +19,7 @@ const TradeView: React.FC<Props> = ({ pair }) => {
         return (
             orderBook.map((order, index) =>
                 <li key={index}>
-                    {order.direction} Order for {pair.pairing} at a price of {order.price} per unit for {order.units} units. Total: {order.total}
+                    {order.direction} {pair.pairing} at {order.price} for {order.units} units. Total: {order.total}
                 </li>
             )
         )
