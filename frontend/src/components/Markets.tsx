@@ -9,6 +9,8 @@ const Markets: React.FC<Props> = () => {
     const [isTradeView, setIsTradeView] = useState<boolean>(false);
     const [tradeViewPair, setTradeViewPair] = useState<tradePair>({main:'USDT', pairing:'BTC'});
 
+    
+
     const usdt_tradingPairs = [
         'BTC',
         'ETH',

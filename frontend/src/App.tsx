@@ -40,7 +40,6 @@ function App() {
     <div className="App">
       <p>{isLoggedIn ? 'Logged in' : 'Not Logged in'}</p>
       <p>Exchange Name</p>
-      <p>We will never track your data</p>
       {isLoggedIn ?
         (
           <>
