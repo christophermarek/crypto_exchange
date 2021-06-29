@@ -8,7 +8,7 @@ import './App.css';
 
 function App() {
 
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(true);
   const [formToDisplay, setFormToDisplay] = useState<string>('register');
 
   const [userName, setUserName] = useState<string>('');
@@ -44,7 +44,7 @@ function App() {
       {isLoggedIn ?
         (
           <>
-            <input type='button' value='Logout' />
+            <input type='button' value='Logout' onClick={() => setIsLoggedIn(false)} />
             <Home />
           </>
         )
