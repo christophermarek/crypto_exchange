@@ -1,7 +1,8 @@
 import { mainModule } from "process";
 import React, { useState } from "react";
+import axios from 'axios';
 
-type Props = TradeViewProps;
+type Props = TradeViewProps & TradeViewTests;
 
 const TradeView: React.FC<Props> = ({ pair, balances, setBalances, usersOrders, setUsersOrders }) => {
 
@@ -27,10 +28,7 @@ const TradeView: React.FC<Props> = ({ pair, balances, setBalances, usersOrders, 
         )
     }
 
-    const executeOrder = () => {
-        
-    }
-
+    /*
     const checkForOrdersToExecute = () => {
         //passed validation, 
         //go through each order book and check if an order can be fufilled
@@ -45,6 +43,18 @@ const TradeView: React.FC<Props> = ({ pair, balances, setBalances, usersOrders, 
         let sellOrdersLen = sellOrderBook.length;
         for (let i = 0; i < buyOrdersLen; i++) {
 
+        }
+    }
+    */
+
+    const sendOrderToServer = async (order: order) => {
+        try {
+            //const response = await axios.post('http://localhost:4000/', JSON.stringify(order));
+
+            const response = await axios.get('http://localhost:4000/');
+            console.log(response);
+        } catch (error) {
+            console.error(error);
         }
     }
 
@@ -67,7 +77,7 @@ const TradeView: React.FC<Props> = ({ pair, balances, setBalances, usersOrders, 
                 setBalances({ ...balances, [pair.main]: String(updatedBalance) });
                 setBuyOrderBook(buyOrderBook => [...buyOrderBook, order]);
                 setUsersOrders(usersOrders => [...usersOrders, order])
-                checkForOrdersToExecute();
+                sendOrderToServer(order);
             } else {
                 alert('insufficient funds to make order')
             }
@@ -79,7 +89,7 @@ const TradeView: React.FC<Props> = ({ pair, balances, setBalances, usersOrders, 
                 setBalances({ ...balances, [pair.pairing]: String(updatedBalance) });
                 setSellOrderBook(sellOrderBook => [...sellOrderBook, order]);
                 setUsersOrders(usersOrders => [...usersOrders, order])
-                checkForOrdersToExecute();
+                sendOrderToServer(order);
             } else {
                 alert('insufficient funds to make order')
             }
@@ -164,5 +174,4 @@ const TradeView: React.FC<Props> = ({ pair, balances, setBalances, usersOrders, 
         </>
     )
 }
-
 export default TradeView;

@@ -27,6 +27,10 @@ interface TradeViewProps{
     setUsersOrders: React.Dispatch<React.SetStateAction<order[]>>
 }
 
+interface TradeViewTests{
+    updateBalance?: (ticker: number, amount: number) => number
+}
+
 interface tradePair{
     main: string
     pairing: string
@@ -47,5 +51,3 @@ interface balances{
     ETH: string
     VET: string
 }
-
-
