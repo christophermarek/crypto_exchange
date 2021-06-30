@@ -25,7 +25,7 @@ const Home: React.FC<Props> = () => {
                 <Balance balances={balances} setBalances={setBalances}/>
             }
             {pageSelected === 'markets' &&
-                <Markets />
+                <Markets balances={balances} setBalances={setBalances}/>
             }
         </>
     )

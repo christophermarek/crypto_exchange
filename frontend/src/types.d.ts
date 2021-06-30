@@ -3,7 +3,8 @@ interface HomeProps{
 }
 
 interface MarketProps{
-
+    balances: balances
+    setBalances: React.Dispatch<React.SetStateAction<balances>>
 }
 
 interface BalanceProps{
@@ -11,14 +12,19 @@ interface BalanceProps{
     setBalances: React.Dispatch<React.SetStateAction<balances>>
 }
 
+
 interface TradeViewProps{
     pair: tradePair
+    balances: balances
+    setBalances: React.Dispatch<React.SetStateAction<balances>>
 }
 
 interface tradePair{
     main: string
     pairing: string
 }
+
+
 
 interface order{
     price: string
