@@ -3,13 +3,14 @@ import React, { useState } from "react";
 
 type Props = TradeViewProps;
 
-const TradeView: React.FC<Props> = ({ pair, balances, setBalances }) => {
+const TradeView: React.FC<Props> = ({ pair, balances, setBalances, usersOrders, setUsersOrders }) => {
 
     //need to pull order book from server eventually
     const [buyOrderBook, setBuyOrderBook] = useState<Array<order>>([]);
     const [sellOrderBook, setSellOrderBook] = useState<Array<order>>([]);
 
     const [isBuyOrder, setIsBuyOrder] = useState<boolean>(true);
+
 
     //orderState
     const [units, setUnits] = useState<string>('');
@@ -26,6 +27,26 @@ const TradeView: React.FC<Props> = ({ pair, balances, setBalances }) => {
         )
     }
 
+    const executeOrder = () => {
+        
+    }
+
+    const checkForOrdersToExecute = () => {
+        //passed validation, 
+        //go through each order book and check if an order can be fufilled
+        //if it can then update balances to either add units on buy
+        //or add usdt on sell fufilled.
+        //update users order to fufilled.
+
+        let buyOrdersLen = buyOrderBook.length;
+        for (let i = 0; i < buyOrdersLen; i++) {
+
+        }
+        let sellOrdersLen = sellOrderBook.length;
+        for (let i = 0; i < buyOrdersLen; i++) {
+
+        }
+    }
 
     const sendOrder = (direction: string) => {
         const total = String(Number(units) * Number(price));
@@ -34,6 +55,7 @@ const TradeView: React.FC<Props> = ({ pair, balances, setBalances }) => {
             total: total,
             units: units,
             price: price,
+            status: 'pending',
             direction: direction
         }
 
@@ -42,8 +64,10 @@ const TradeView: React.FC<Props> = ({ pair, balances, setBalances }) => {
             let currBalance = balances['USDT'];
             if (Number(total) <= Number(currBalance)) {
                 let updatedBalance = Number(currBalance) - Number(total);
-                setBalances({ ...balances, ['USDT']: String(updatedBalance) });
+                setBalances({ ...balances, [pair.main]: String(updatedBalance) });
                 setBuyOrderBook(buyOrderBook => [...buyOrderBook, order]);
+                setUsersOrders(usersOrders => [...usersOrders, order])
+                checkForOrdersToExecute();
             } else {
                 alert('insufficient funds to make order')
             }
@@ -54,19 +78,21 @@ const TradeView: React.FC<Props> = ({ pair, balances, setBalances }) => {
                 let updatedBalance = Number(currBalance) - Number(units);
                 setBalances({ ...balances, [pair.pairing]: String(updatedBalance) });
                 setSellOrderBook(sellOrderBook => [...sellOrderBook, order]);
+                setUsersOrders(usersOrders => [...usersOrders, order])
+                checkForOrdersToExecute();
             } else {
                 alert('insufficient funds to make order')
             }
         }
+
     }
 
     const getBalance = (ticker: string) => {
-        switch (pair.pairing) {
+        switch (ticker) {
             case 'BTC':
                 return balances['BTC'];
             case 'ETH':
                 return balances['ETH'];
-
             case 'VET':
                 return balances['VET'];
         }

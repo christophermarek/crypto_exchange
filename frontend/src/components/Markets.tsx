@@ -4,7 +4,7 @@ import TradeView from './TradeView';
 
 type Props = MarketProps;
 
-const Markets: React.FC<Props> = ( { balances, setBalances } ) => {
+const Markets: React.FC<Props> = ( { balances, setBalances, usersOrders, setUsersOrders } ) => {
 
     const [isTradeView, setIsTradeView] = useState<boolean>(false);
     const [tradeViewPair, setTradeViewPair] = useState<tradePair>({main:'USDT', pairing:'BTC'});
@@ -38,7 +38,7 @@ const Markets: React.FC<Props> = ( { balances, setBalances } ) => {
                 (
                     <div className={'tradeView'}>
                         <input type='button' value='Back' onClick={() => setIsTradeView(false)} />
-                        <TradeView pair={tradeViewPair} balances={balances} setBalances={setBalances}/>
+                        <TradeView pair={tradeViewPair} balances={balances} setBalances={setBalances} usersOrders={usersOrders} setUsersOrders={setUsersOrders}/>
                     </div>
                 )
             }

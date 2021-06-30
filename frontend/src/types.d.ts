@@ -5,6 +5,8 @@ interface HomeProps{
 interface MarketProps{
     balances: balances
     setBalances: React.Dispatch<React.SetStateAction<balances>>
+    usersOrders: order[]
+    setUsersOrders: React.Dispatch<React.SetStateAction<order[]>>
 }
 
 interface BalanceProps{
@@ -12,11 +14,17 @@ interface BalanceProps{
     setBalances: React.Dispatch<React.SetStateAction<balances>>
 }
 
+interface OrdersProps{
+    usersOrders: order[]
+}
+
 
 interface TradeViewProps{
     pair: tradePair
     balances: balances
     setBalances: React.Dispatch<React.SetStateAction<balances>>
+    usersOrders: order[]
+    setUsersOrders: React.Dispatch<React.SetStateAction<order[]>>
 }
 
 interface tradePair{
@@ -25,12 +33,12 @@ interface tradePair{
 }
 
 
-
 interface order{
     price: string
     units: string
     direction: string
     total: string
+    status: string
 }
 
 interface balances{
