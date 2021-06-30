@@ -2,7 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const index_1 = require("../controllers/user/index");
+const index_2 = require("../controllers/orderbooks/index");
 const router = express_1.Router();
 router.post("/api/register", index_1.register);
 router.post("/api/login", index_1.login);
+router.get("/user/getusersoders/:user_id", index_2.getUsersOrders);
 exports.default = router;

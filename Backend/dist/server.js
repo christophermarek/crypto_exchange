@@ -24,24 +24,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const dotenv = __importStar(require("dotenv"));
-const mongoose_1 = __importDefault(require("mongoose"));
 const cors_1 = __importDefault(require("cors"));
 const routes_1 = __importDefault(require("./routes"));
 const body_parser_1 = __importDefault(require("body-parser"));
-dotenv.config();
-console.log("dotenv", dotenv);
+if (process.env.NODE_ENV !== "production") {
+    // Load environment variables from .env file in non prod environments
+    dotenv.config();
+}
+require("./utils/connectdb");
 const app = express_1.default();
 const PORT = process.env.PORT || 4000;
 app.use(body_parser_1.default.json());
 app.use(cors_1.default());
 app.use(routes_1.default);
 app.get('/', (req, res) => { res.send('Server is Running'); });
-const uri = `mongodb+srv://chris:${process.env.MONGO_PASSWORD}@cluster0.vgjbs.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`;
-const options = { useNewUrlParser: true, useUnifiedTopology: true };
-mongoose_1.default.set('useFindAndModify', false);
-mongoose_1.default
-    .connect(uri, options)
-    .then(() => app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`)))
-    .catch((error) => {
-    throw error;
-});
+app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));

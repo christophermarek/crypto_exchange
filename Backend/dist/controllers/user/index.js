@@ -44,11 +44,12 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log('trying to login');
     try {
         let userName = req.body.userName;
+        //we dont even check password
         let password = req.body.password;
         let found = yield user_1.user.findOne({ username: userName }).exec();
         //no user found
         if (found == null) {
-            res.status(200).json({ loggedIn: false, message: 'No user found' });
+            res.status(400).json({ loggedIn: false, message: 'No user found' });
         }
         else {
             res.status(200).json({ loggedIn: true, message: 'successfully logged in' });

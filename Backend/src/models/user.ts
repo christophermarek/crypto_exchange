@@ -1,4 +1,4 @@
-import { userType } from "../types/userType";
+import G from '../types';
 import { model, Schema } from "mongoose";
 
 const userSchema: Schema = new Schema(
@@ -10,6 +10,6 @@ const userSchema: Schema = new Schema(
   },
 )
 
-export const user = model<userType>("user", userSchema);
+export const user = model<G.userType>("user", userSchema);
 
 

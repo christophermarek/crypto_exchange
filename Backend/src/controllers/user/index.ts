@@ -1,8 +1,5 @@
 import { Response, Request } from "express"
 import { user } from "../../models/user"
-import { userType } from "../../types/userType";
-
-
 
 const register = async (req: Request, res: Response): Promise<void> => {
     try {
@@ -36,13 +33,14 @@ const login = async (req: Request, res: Response): Promise<void> => {
     console.log('trying to login');
     try {
         let userName = req.body.userName;
+        //we dont even check password
         let password = req.body.password;
 
         let found = await user.findOne({ username: userName }).exec();
        
         //no user found
         if(found == null){
-            res.status(200).json({loggedIn: false, message: 'No user found'})
+            res.status(400).json({loggedIn: false, message: 'No user found'})
         }else{
             res.status(200).json({loggedIn: true, message: 'successfully logged in'})
 
