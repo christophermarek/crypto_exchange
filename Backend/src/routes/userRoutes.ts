@@ -4,7 +4,7 @@ const User = require("../models/user")
 import passport from "passport"
 const jwt = require("jsonwebtoken")
 
-const { getToken, COOKIE_OPTIONS, getRefreshToken } = require("../authenticate")
+const { getToken, COOKIE_OPTIONS, getRefreshToken, verifyUser } = require("../authenticate")
 
 router.post("/signup", (req: { body: { firstName: any; username: any; password: any; lastName: string } }, res: { statusCode: number; send: (arg0: { name?: string; message?: string; success?: boolean; token?: any }) => void; cookie: (arg0: string, arg1: any, arg2: any) => void }, next: any) => {
   // Verify that first name is not empty
@@ -63,9 +63,9 @@ router.post("/login", passport.authenticate("local"), (req: { user: { _id: any }
   )
 })
 
-router.post("/refreshToken", (req: { signedCookies?: {} | undefined }, res: { statusCode: number; send: (arg0: string) => void; cookie: (arg0: string, arg1: any, arg2: any) => void }, next: (arg0: any) => any) => {
-  const { signedCookies = {} } = req
-  const refreshToken = signedCookies
+router.post("/refreshToken", (req: { signedCookies?: { refreshToken: '' } | undefined }, res: { statusCode: number; send: (arg0: string) => void; cookie: (arg0: string, arg1: any, arg2: any) => void }, next: (arg0: any) => any) => {
+  const { signedCookies = { refreshToken: '' } } = req
+  const refreshToken = signedCookies.refreshToken;
   if (refreshToken) {
     try {
       const payload = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET)
@@ -79,8 +79,6 @@ router.post("/refreshToken", (req: { signedCookies?: {} | undefined }, res: { st
             )
             if (tokenIndex === -1) {
               res.statusCode = 401
-  console.log('here')
-
               res.send("Unauthorized")
             } else {
               const token = getToken({ _id: userId })
@@ -92,6 +90,7 @@ router.post("/refreshToken", (req: { signedCookies?: {} | undefined }, res: { st
                   res.statusCode = 500
                   res.send(err)
                 } else {
+
                   res.cookie("refreshToken", newRefreshToken, COOKIE_OPTIONS)
                   res.send(JSON.stringify({ success: true, token }))
                 }
@@ -99,8 +98,6 @@ router.post("/refreshToken", (req: { signedCookies?: {} | undefined }, res: { st
             }
           } else {
             res.statusCode = 401
-  console.log('here1')
-
             res.send("Unauthorized")
           }
         },
@@ -108,16 +105,41 @@ router.post("/refreshToken", (req: { signedCookies?: {} | undefined }, res: { st
       )
     } catch (err) {
       res.statusCode = 401
-  console.log('here2')
-      console.log(err);
       res.send("Unauthorized")
     }
   } else {
     res.statusCode = 401
-  console.log('here3')
-
     res.send("Unauthorized")
   }
+})
+
+router.get("/me", verifyUser, (req: { user: any }, res: { send: (arg0: any) => void }, next: any) => {
+  res.send(req.user)
+})
+
+router.get("/logout", verifyUser, (req: { user?: any; signedCookies?: any }, res: { statusCode: number; send: (arg0: { success: boolean }) => void; clearCookie: (arg0: string, arg1: any) => void }, next: (arg0: any) => any) => {
+  const { signedCookies = {} } = req
+  const { refreshToken } = signedCookies
+  User.findById(req.user._id).then(
+    (user: any) => {
+      const tokenIndex = user.refreshToken.findIndex(
+        (item: { refreshToken: any }) => item.refreshToken === refreshToken
+      )
+      if (tokenIndex !== -1) {
+        user.refreshToken.id(user.refreshToken[tokenIndex]._id).remove()
+      }
+      user.save((err: { success: boolean }, user: any) => {
+        if (err) {
+          res.statusCode = 500
+          res.send(err)
+        } else {
+          res.clearCookie("refreshToken", COOKIE_OPTIONS)
+          res.send({ success: true })
+        }
+      })
+    },
+    (err: any) => next(err)
+  )
 })
 
 module.exports = router
