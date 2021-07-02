@@ -27,15 +27,27 @@ const dotenv = __importStar(require("dotenv"));
 const cors_1 = __importDefault(require("cors"));
 const routes_1 = __importDefault(require("./routes"));
 const body_parser_1 = __importDefault(require("body-parser"));
+const cookie_parser_1 = __importDefault(require("cookie-parser"));
+const passport = require("passport");
 if (process.env.NODE_ENV !== "production") {
     // Load environment variables from .env file in non prod environments
     dotenv.config();
 }
 require("./utils/connectdb");
+require("./strategies/JwtStrategy");
+require("./strategies/LocalStrategy");
+require("./authenticate");
+const userRouter = require("./routes/userRoutes");
 const app = express_1.default();
 const PORT = process.env.PORT || 4000;
 app.use(body_parser_1.default.json());
+app.use(cookie_parser_1.default(process.env.COOKIE_SECRET));
 app.use(cors_1.default());
+app.use(passport.initialize());
+app.use("/users", userRouter);
 app.use(routes_1.default);
-app.get('/', (req, res) => { res.send('Server is Running'); });
+app.get('/', (req, res) => {
+    res.send('Server is Running');
+});
+//start server
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));

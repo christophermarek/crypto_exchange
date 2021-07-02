@@ -10,12 +10,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.login = exports.register = void 0;
-const user_1 = require("../../models/user");
 const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let userName = req.body.userName;
         let password = req.body.password;
-        let found = yield user_1.user.findOne({ username: userName }).exec();
+        let found = yield user.findOne({ username: userName }).exec();
         //console.log(found);
         //no user found
         //so create one
@@ -23,7 +22,7 @@ const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             try {
                 //should hash password here probably
                 //and need to send back a session
-                yield user_1.user.create({ username: userName, password: password });
+                yield user.create({ username: userName, password: password });
                 res.status(200).json({ registered: true, message: 'successfully registered user' });
             }
             catch (error) {
@@ -46,7 +45,7 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         let userName = req.body.userName;
         //we dont even check password
         let password = req.body.password;
-        let found = yield user_1.user.findOne({ username: userName }).exec();
+        let found = yield user.findOne({ username: userName }).exec();
         //no user found
         if (found == null) {
             res.status(400).json({ loggedIn: false, message: 'No user found' });

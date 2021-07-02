@@ -1,11 +1,44 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.user = void 0;
-const mongoose_1 = require("mongoose");
-const userSchema = new mongoose_1.Schema({
-    username: { type: String, required: true },
-    password: { type: String, required: true },
-    createdAt: { type: Date },
-    updatedAt: { type: Date }
+const mongoose_1 = __importDefault(require("mongoose"));
+const Schema = mongoose_1.default.Schema;
+const passportLocalMongoose = require("passport-local-mongoose");
+const Session = new Schema({
+    refreshToken: {
+        type: String,
+        default: "",
+    },
 });
-exports.user = mongoose_1.model("user", userSchema);
+const User = new Schema({
+    firstName: {
+        type: String,
+        default: "",
+    },
+    lastName: {
+        type: String,
+        default: "",
+    },
+    authStrategy: {
+        type: String,
+        default: "local",
+    },
+    points: {
+        type: Number,
+        default: 50,
+    },
+    refreshToken: {
+        type: [Session],
+    },
+});
+//Remove refreshToken from the response
+User.set("toJSON", {
+    transform: function (doc, ret, options) {
+        delete ret.refreshToken;
+        return ret;
+    },
+});
+User.plugin(passportLocalMongoose);
+module.exports = mongoose_1.default.model("User", User);
