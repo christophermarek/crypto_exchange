@@ -23,7 +23,7 @@ const app: Express = express()
 const PORT: string | number = process.env.PORT || 4000
 app.use(bodyParser.json())
 app.use(cookieParser(process.env.COOKIE_SECRET))
-app.use(cors())
+app.use(cors({credentials: true, origin: 'http://localhost:3000'}))
 app.use(passport.initialize())
 app.use("/users", userRouter)
 app.use(bnnmarketcallRoutes)

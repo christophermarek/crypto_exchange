@@ -42,7 +42,7 @@ const app = express_1.default();
 const PORT = process.env.PORT || 4000;
 app.use(body_parser_1.default.json());
 app.use(cookie_parser_1.default(process.env.COOKIE_SECRET));
-app.use(cors_1.default());
+app.use(cors_1.default({ credentials: true, origin: 'http://localhost:3000' }));
 app.use(passport.initialize());
 app.use("/users", userRouter);
 app.use(routes_1.default);
