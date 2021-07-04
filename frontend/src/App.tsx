@@ -8,7 +8,6 @@ import './App.css';
 
 function App() {
 
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [formToDisplay, setFormToDisplay] = useState<string>('register');
 
   const [userName, setUserName] = useState<string>('');
@@ -19,11 +18,11 @@ function App() {
 
   const registerClicked = async () => {
     const genericErrorMessage = "Something went wrong! Please try again later."
-    fetch(process.env.REACT_APP_API_ENDPOINT + "users/signup", {
+    fetch("http://localhost:4000/users/signup", {
       method: "POST",
       credentials: "include",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ firstName: 'chris', lastName: 'dog', username: userName, password }),
+      body: JSON.stringify({ firstName: 'chris', lastName: 'dog', username: userName, password: password }),
     })
       .then(async response => {
         if (!response.ok) {
@@ -52,7 +51,7 @@ function App() {
   const loginClicked = async () => {
     try {
       const genericErrorMessage = "Something went wrong! Please try again later."
-    fetch("http://localhost:4000/" + "users/login", {
+    fetch("http://localhost:4000/users/login", {
       method: "POST",
       credentials: "include",
       headers: { "Content-Type": "application/json" },
@@ -84,12 +83,12 @@ function App() {
 
   return (
     <div className="App">
-      <p>{isLoggedIn ? 'Logged in' : 'Not Logged in'}</p>
+      <p>{token !== '' ? 'Logged in' : 'Not Logged in'}</p>
       <p>Exchange Name</p>
-      {isLoggedIn ?
+      {token !== '' ?
         (
           <>
-            <input type='button' value='Logout' onClick={() => setIsLoggedIn(false)} />
+            <input type='button' value='Logout' onClick={() => (true)} />
             <Home />
           </>
         )

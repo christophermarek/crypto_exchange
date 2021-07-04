@@ -44,7 +44,6 @@ router.post("/signup", (req: { body: { firstName: any; username: any; password: 
 })
 
 router.post("/login", passport.authenticate("local"), (req: { user: { _id: any } }, res: { statusCode: number; send: (arg0: { success: boolean; token: any }) => void; cookie: (arg0: string, arg1: any, arg2: any) => void }, next: (arg0: any) => any) => {
-  console.log('called');
   const token = getToken({ _id: req.user._id })
   const refreshToken = getRefreshToken({ _id: req.user._id })
   User.findById(req.user._id).then(
