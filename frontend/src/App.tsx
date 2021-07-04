@@ -19,10 +19,9 @@ function App() {
   const verifyUser: any = useCallback(() => {
     fetch("http://localhost:4000/users/refreshToken", {
       method: "POST",
-      credentials: "same-origin",
-      headers: {"Content-Type": "application/json"},
+      credentials: "include",
+      headers: { "Content-Type": "application/json"},
     }).then(async response => {
-      console.log(response);
       if (response.ok) {
         const data = await response.json()
         updateToken(data.token)
@@ -40,7 +39,7 @@ function App() {
 
 
   const logoutHandler = () => {
-    fetch(process.env.REACT_APP_API_ENDPOINT + "users/logout", {
+    fetch("http://localhost:4000/users/logout", {
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
@@ -154,7 +153,7 @@ return (
       )
       : token !== '' ? (
         <>
-          <input type='button' value='Logout' onClick={() => (logoutHandler)} />
+          <input type='button' value='Logout' onClick={() => (logoutHandler())} />
           <Home />
         </>
       ) : (

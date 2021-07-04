@@ -1,3 +1,4 @@
+import { NONAME } from "node:dns";
 import passport from "passport"
 const jwt = require("jsonwebtoken")
 const dev = process.env.NODE_ENV !== "production"
@@ -21,7 +22,7 @@ exports.COOKIE_OPTIONS = {
   httpOnly: true,
   // Since localhost is not having https protocol,
   // secure cookies do not work correctly (in postman)
-  secure: !dev,
+  secure: true,
   signed: true,
   maxAge: eval(tokenExpiry) * 1000,
   sameSite: "none",

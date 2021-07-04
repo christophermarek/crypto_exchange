@@ -64,7 +64,6 @@ router.post("/login", passport.authenticate("local"), (req: { user: { _id: any }
 })
 
 router.post("/refreshToken", (req: { signedCookies: { refreshToken: string } }, res: { statusCode: number; send: (arg0: { message?: string; success?: boolean; token?: any }) => void; cookie: (arg0: string, arg1: any, arg2: any) => void }, next: (arg0: any) => any) => {
-  console.log(req.signedCookies);
   const refreshToken = req.signedCookies.refreshToken
   if (refreshToken) {
     try {
@@ -79,7 +78,6 @@ router.post("/refreshToken", (req: { signedCookies: { refreshToken: string } }, 
             )
             if (tokenIndex === -1) {
               res.statusCode = 401
-              console.log('here1')
               res.send({ message: "Unauthorized" })
             } else {
               const token = getToken({ _id: userId })
@@ -98,7 +96,6 @@ router.post("/refreshToken", (req: { signedCookies: { refreshToken: string } }, 
             }
           } else {
             res.statusCode = 401
-            console.log('here2')
             res.send({ message: "Unauthorized" })
           }
         },
@@ -106,12 +103,10 @@ router.post("/refreshToken", (req: { signedCookies: { refreshToken: string } }, 
       )
     } catch (err) {
       res.statusCode = 401
-      console.log('here3')
       res.send({ message: "Unauthorized" })
     }
   } else {
     res.statusCode = 401
-    console.log('here4')
     res.send({ message: "Unauthorized" })
   }
 })
