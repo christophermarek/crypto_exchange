@@ -63,15 +63,14 @@ router.post("/login", passport.authenticate("local"), (req: { user: { _id: any }
   )
 })
 
-router.post("/refreshToken", (req: { signedCookies?: { refreshToken: '' } | undefined }, res: { statusCode: number; send: (arg0: string) => void; cookie: (arg0: string, arg1: any, arg2: any) => void }, next: (arg0: any) => any) => {
-  const { signedCookies = { refreshToken: '' } } = req
-  const refreshToken = signedCookies.refreshToken;
+router.post("/refreshToken", (req: { signedCookies: { refreshToken: string } }, res: { statusCode: number; send: (arg0: { message?: string; success?: boolean; token?: any }) => void; cookie: (arg0: string, arg1: any, arg2: any) => void }, next: (arg0: any) => any) => {
+  const refreshToken = req.signedCookies.refreshToken
   if (refreshToken) {
     try {
       const payload = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET)
       const userId = payload._id
       User.findOne({ _id: userId }).then(
-        (user: { refreshToken: any[]; save: (arg0: (err: any, user: any) => void) => void }) => {
+        (user: { refreshToken: { refreshToken: any }[]; save: (arg0: (err: any, user: any) => void) => void }) => {
           if (user) {
             // Find the refresh token against the user record in database
             const tokenIndex = user.refreshToken.findIndex(
@@ -79,37 +78,36 @@ router.post("/refreshToken", (req: { signedCookies?: { refreshToken: '' } | unde
             )
             if (tokenIndex === -1) {
               res.statusCode = 401
-              res.send("Unauthorized")
+              res.send({ message: "Unauthorized" })
             } else {
               const token = getToken({ _id: userId })
               // If the refresh token exists, then create new one and replace it.
               const newRefreshToken = getRefreshToken({ _id: userId })
               user.refreshToken[tokenIndex] = { refreshToken: newRefreshToken }
-              user.save((err: string, user: any) => {
+              user.save((err: any, user: any) => {
                 if (err) {
                   res.statusCode = 500
                   res.send(err)
                 } else {
-
                   res.cookie("refreshToken", newRefreshToken, COOKIE_OPTIONS)
-                  res.send(JSON.stringify({ success: true, token }))
+                  res.send({ success: true, token })
                 }
               })
             }
           } else {
             res.statusCode = 401
-            res.send("Unauthorized")
+            res.send({ message: "Unauthorized" })
           }
         },
         (err: any) => next(err)
       )
     } catch (err) {
       res.statusCode = 401
-      res.send("Unauthorized")
+      res.send({ message: "Unauthorized" })
     }
   } else {
     res.statusCode = 401
-    res.send("Unauthorized")
+    res.send({ message: "Unauthorized" })
   }
 })
 

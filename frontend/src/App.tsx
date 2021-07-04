@@ -2,7 +2,8 @@ import React, { useState, useContext } from 'react';
 import axios from 'axios';
 
 import Home from './components/Home';
-import { UserContext } from "./context/UserContext"
+import { UserContext } from "./context/UserContext";
+import Loader from "./components/Loader";
 import logo from './logo.svg';
 import './App.css';
 

@@ -62,8 +62,7 @@ router.post("/login", passport_1.default.authenticate("local"), (req, res, next)
     }, (err) => next(err));
 });
 router.post("/refreshToken", (req, res, next) => {
-    const { signedCookies = { refreshToken: '' } } = req;
-    const refreshToken = signedCookies.refreshToken;
+    const refreshToken = req.signedCookies.refreshToken;
     if (refreshToken) {
         try {
             const payload = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
@@ -74,7 +73,7 @@ router.post("/refreshToken", (req, res, next) => {
                     const tokenIndex = user.refreshToken.findIndex((item) => item.refreshToken === refreshToken);
                     if (tokenIndex === -1) {
                         res.statusCode = 401;
-                        res.send("Unauthorized");
+                        res.send({ message: "Unauthorized" });
                     }
                     else {
                         const token = getToken({ _id: userId });
@@ -88,25 +87,25 @@ router.post("/refreshToken", (req, res, next) => {
                             }
                             else {
                                 res.cookie("refreshToken", newRefreshToken, COOKIE_OPTIONS);
-                                res.send(JSON.stringify({ success: true, token }));
+                                res.send({ success: true, token });
                             }
                         });
                     }
                 }
                 else {
                     res.statusCode = 401;
-                    res.send("Unauthorized");
+                    res.send({ message: "Unauthorized" });
                 }
             }, (err) => next(err));
         }
         catch (err) {
             res.statusCode = 401;
-            res.send("Unauthorized");
+            res.send({ message: "Unauthorized" });
         }
     }
     else {
         res.statusCode = 401;
-        res.send("Unauthorized");
+        res.send({ message: "Unauthorized" });
     }
 });
 router.get("/me", verifyUser, (req, res, next) => {
