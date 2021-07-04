@@ -62,6 +62,7 @@ router.post("/login", passport_1.default.authenticate("local"), (req, res, next)
     }, (err) => next(err));
 });
 router.post("/refreshToken", (req, res, next) => {
+    console.log(req.signedCookies);
     const refreshToken = req.signedCookies.refreshToken;
     if (refreshToken) {
         try {
@@ -73,6 +74,7 @@ router.post("/refreshToken", (req, res, next) => {
                     const tokenIndex = user.refreshToken.findIndex((item) => item.refreshToken === refreshToken);
                     if (tokenIndex === -1) {
                         res.statusCode = 401;
+                        console.log('here1');
                         res.send({ message: "Unauthorized" });
                     }
                     else {
@@ -94,17 +96,20 @@ router.post("/refreshToken", (req, res, next) => {
                 }
                 else {
                     res.statusCode = 401;
+                    console.log('here2');
                     res.send({ message: "Unauthorized" });
                 }
             }, (err) => next(err));
         }
         catch (err) {
             res.statusCode = 401;
+            console.log('here3');
             res.send({ message: "Unauthorized" });
         }
     }
     else {
         res.statusCode = 401;
+        console.log('here4');
         res.send({ message: "Unauthorized" });
     }
 });
